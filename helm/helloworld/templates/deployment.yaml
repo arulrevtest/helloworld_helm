@@ -9,6 +9,15 @@ metadata:
     heritage: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: {{ .Values.strategy.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.strategy.rollingUpdate.maxUnavailable }}
+  minReadySeconds: {{ .Values.strategy.rollingUpdate.minReadySeconds }}
+  selector:
+    matchLabels:
+      app: {{ template "`helloworld.name" . }}
   template:
     metadata:
       labels:
