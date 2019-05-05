@@ -18,3 +18,7 @@ resources:
   requests:
     cpu: 100m
     memory: 128Mi
+containers:
+  env:
+      name: spring.datasource.url
+      value: "jdbc:mysql://mysql-service.default/admin?allowPublicKeyRetrieval=true&useSSL=false"
