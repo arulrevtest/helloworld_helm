@@ -45,7 +45,7 @@ volumes: [
                 "KUBECONFIG=/home/[jenkins_user]/.kube/kubernetes_deployment_config",
                 "KUBECTL=kubectl --token $K8S_TOKEN",
             ]) {
-                 sh "kubectl get nodes"
+                 sh "$KUBECTL get nodes"
             }
          }
         }
