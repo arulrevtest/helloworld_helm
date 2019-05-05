@@ -31,7 +31,7 @@ volumes: [
     }
     stage('Build and push image with Container Builder') {
         container('docker') {
-          sh "docker build -t ${imageRepo}/${appName}:${env.BUILD_NUMBER} ./docker"
+          sh "docker build -t ${imageRepo}/${appName}:${env.BUILD_NUMBER} ."
           withDockerRegistry([ credentialsId: "2d3a7c2b-58a2-4740-9195-e9082d59468b", url: "" ]) {
             sh "docker push ${imageRepo}/${appName}:${env.BUILD_NUMBER}"
         }
