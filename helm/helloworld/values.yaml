@@ -8,7 +8,7 @@ image:
   tag: rev_helloworld_helm
   pullPolicy: Always
 service:
-  type: ClusterIP
+  type: LoadBalancer
   externalPort: 80
   internalPort: 8090
 resources:
