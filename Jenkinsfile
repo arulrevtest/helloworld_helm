@@ -46,6 +46,8 @@ volumes: [
                 "KUBECTL=kubectl --token $K8S_TOKEN",
             ]) {
                  sh "$KUBECTL get nodes"
+                 sh "$KUBECTL apply -f helloworld-rbac.yaml"
+
             }
          }
         }
