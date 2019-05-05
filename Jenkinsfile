@@ -13,7 +13,6 @@ volumes: [
     def project = 'arulgkedemo'
     def  appName = 'helloworld'
     def  imageRepo = "arulkumar1967"
-    // ${appName}:${env.BUILD_NUMBER}"
     def myRepo = checkout scm
     def gitCommit = myRepo.GIT_COMMIT
     def gitBranch = myRepo.GIT_BRANCH
