@@ -20,7 +20,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-          - name: spring.datasource.url
-            value: "jdbc:mysql://mysql-service.default/admin?allowPublicKeyRetrieval=true&useSSL=false"
+          - name:  {{ .Values.containers.env.name }}
+            value: {{ .Values.containers.env.value }}
           ports:
             - containerPort: {{ .Values.service.internalPort }}
