@@ -54,7 +54,7 @@ volumes: [
         container(name: 'helm') {
             def overrides = "image.repository=${imageRepo}/${appName},image.tag=${env.BUILD_NUMBER}"
             def releaseName = "helloworld"
-            def chart_dir = "helloworld"
+            def chart_dir = "helm/helloworld"
 
             sh "helm init"
             sh "helm version"
