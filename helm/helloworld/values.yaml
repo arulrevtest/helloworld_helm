@@ -1,0 +1,20 @@
+# Default values for acme.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+imagePullSecrets:
+image:
+  repository: arulkumar1967
+  tag: rev_helloworld_helm
+  pullPolicy: Always
+service:
+  type: ClusterIP
+  externalPort: 80
+  internalPort: 8090
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
