@@ -15,26 +15,12 @@ spec:
         app: {{ template "`helloworld.name" . }}
         release: {{ .Release.Name }}
     spec:
-    {{- if .Values.imagePullSecrets }}
-      imagePullSecrets:
-      - name: {{ .Values.imagePullSecrets }}
-    {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-          - name: {{ .Values.containers.env.name }}
-            value: {{ .Values.containers.env.value }}
+          - name: spring.datasource.url
+            value: "jdbc:mysql://mysql-service.default/admin?allowPublicKeyRetrieval=true&useSSL=false"
           ports:
             - containerPort: {{ .Values.service.internalPort }}
-          livenessProbe:
-            httpGet:
-              path: /
-              port: {{ .Values.service.internalPort }}
-          readinessProbe:
-            httpGet:
-              path: /
-              port: {{ .Values.service.internalPort }}
-          resources:
-{{ toYaml .Values.resources | indent 12 }}
