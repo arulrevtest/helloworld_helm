@@ -39,7 +39,15 @@ volumes: [
     }
     stage('Deploy docker image') {
         container(name: 'kubectl') {
-            sh "kubectl get nodes"
+            withCredentials([string(credentialsId: '16469a0d-1ac3-4404-9f66-f81893abe4cf', variable: 'K8S_TOKEN')]) {
+            withEnv([
+                // Ensure that kubectl is using our special robot deployer’s kubeconfig
+                "KUBECONFIG=/home/[jenkins_user]/.kube/kubernetes_deployment_config",
+                "KUBECTL=kubectl --token $K8S_TOKEN",
+            ]) {
+                 sh "kubectl get nodes"
+            }
+         }
         }
         container(name: 'helm') {
             def overrides = "image.repository=${imageRepo}/${appName},image.tag=${env.BUILD_NUMBER}"
