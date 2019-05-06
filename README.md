@@ -1,4 +1,4 @@
-# Spring Boot Continuous Deployment Pipeline with Jenkins and GKE
+# Spring Boot Continuous Deployment Pipeline with Jenkins, GKE and Helm
 
 ## Enhancements in this repository
 
