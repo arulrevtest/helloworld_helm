@@ -1,8 +1,16 @@
 # Spring Boot Continuous Deployment Pipeline with Jenkins and GKE
 
+## Enhancements in this repository
+
+1. Helm chart is used to deploy to GKE cluster. Please refer to helm folder and Deploy job in Jenkinsfile for more details
+1. Installing Jenkins with helm chart
+1. Terraform code to create GKE cluster
+1. Testcases are written for Springboot controller
+
+
 ## Prerequisites
 1. A Google Cloud Platform Account
-1. [Enable the Compute Engine, Container Engine, and Container Builder APIs](https://console.cloud.google.com/flows/enableapi?apiid=compute_component,container,cloudbuild.googleapis.com)
+1. [Enable the Compute Engine, Container Engine](https://console.cloud.google.com/flows/enableapi?apiid=compute_component,container)
 
 ## Setting up Google Cloud Shell
 In this section you will start [Google Cloud Shell](https://cloud.google.com/cloud-shell/docs/) and clone the lab code repository to it.
@@ -21,15 +29,12 @@ In this section you will start [Google Cloud Shell](https://cloud.google.com/clo
 1. Clone the lab repository in cloud shell, then `cd` into that dir:
 
   ```shell
-  $ git clone https://github.com/arulrevtest/helloworldgke.git
-  Cloning into 'helloworldgke'...
-  ...
+  $ git clone https://github.com/arulrevtest/helloworld_helm.git
 
-  $ cd helloworldgke
+  $ cd helloworld_helm
   ```
 
-## Create a Kubernetes Cluster
-Use Terraform to create and manage Kubernetes cluster.
+## Create a Kubernetes Cluster with Terraform
 
 Update terraform/variables.tf with appropriate project, cluster_name and other parameters
 
@@ -39,7 +44,7 @@ Update terraform/variables.tf with appropriate project, cluster_name and other p
     $ terraform apply -auto-approve
 ```
 
-Once that terraform apply completes, download the credentials for the cluster using the [gcloud CLI](https://cloud.google.com/sdk/):
+Download the credentials for the cluster using the [gcloud CLI](https://cloud.google.com/sdk/):
 ```shell
 $ gcloud container clusters get-credentials jenkins-cd
 Fetching cluster endpoint and auth data.
@@ -52,7 +57,6 @@ Confirm that the cluster is running and `kubectl` is working by listing pods:
 $ kubectl get pods
 No resources found.
 ```
-You should see `No resources found.`.
 
 ## Install Helm
 
@@ -72,7 +76,7 @@ Using Helm to install Jenkins from the Charts repository.
     ```
 
 1. Add ourself as a cluster administrator in the cluster's RBAC so that you can give Jenkins permissions in the cluster:
-    
+
     ```shell
     kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$(gcloud config get-value account)
     ```
@@ -126,10 +130,86 @@ Using Helm to install Jenkins from the Charts repository.
 
 
 ### Add service account credentials
-First we will need to configure our GCP credentials in order for Jenkins to be able to access our code repository
 
 1. In the Jenkins UI, Click “Credentials” on the left
 1. Click either of the “(global)” links (they both route to the same URL)
 1. Click “Add Credentials” on the left
 1. From the “Kind” dropdown, select “Google Service Account from metadata”
 1. Click “OK”
+
+### Create and configure Jenkins pipeline
+
+1. With this repository as Git (SCM) source create Jenkins pipeline job
+1. Execute the build job
+
+
+## Testing application
+
+### Create table in RDS mysql instance with mysql client with below ddl command
+```
+CREATE TABLE users ( id smallint unsigned not null auto_increment, user_name varchar(20), date_of_birth varchar(20), constraint pk_example primary key (id) );
+
+```
+
+### Sample Test Scripts
+
+Replace ip address appropriately
+
+```
+Command:
+curl -X PUT \
+  http://34.244.214.224:8090/hello/Arul \
+  -H 'Cache-Control: no-cache' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "dateOfBirth": "2007-06-12"
+}'
+Expected result:
+No Response message. Row should be created in users table for Arul
+
+Command:
+curl -X GET \
+  http://34.244.214.224:8090/hello/Arul \
+  -H 'Cache-Control: no-cache'
+ Expected Result:
+ Hello Arul Your birthday is in N Day(s)
+
+Command:
+curl -X PUT \
+  http://34.244.214.224:8090/hello/Arulk \
+  -H 'Cache-Control: no-cache' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "dateOfBirth": "2007-04-24"
+}'
+Expected result:
+No Response message. Row should be created in users table for Arulk
+
+Command:
+curl -X GET \
+  http://34.244.214.224:8090/hello/Arulk \
+  -H 'Cache-Control: no-cache'
+ Expected Result:
+ Hello Arulk Happy Birthday!
+
+Command:
+curl -X PUT \
+  http://34.244.214.224:8090/hello/Arulk12 \
+  -H 'Cache-Control: no-cache' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "dateOfBirth": "2007-04-24"
+}'
+Expected result:
+Arulk12 must contains only letters.
+
+Command:
+curl -X PUT \
+  http://34.244.214.224:8090/hello/Arulku \
+  -H 'Cache-Control: no-cache' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "dateOfBirth": "2019-04-30"
+}'
+Expected result:
+Date 2019-04-30 must be a date before the today date
