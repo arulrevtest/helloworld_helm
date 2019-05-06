@@ -34,6 +34,11 @@ In this section you will start [Google Cloud Shell](https://cloud.google.com/clo
   $ cd helloworld_helm
   ```
 
+## Architecture
+
+![](RevGKEDemo_Helm.png)
+
+
 ## Create a Kubernetes Cluster with Terraform
 
 Update terraform/variables.tf with appropriate project, cluster_name and other parameters
