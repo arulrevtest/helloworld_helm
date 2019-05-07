@@ -142,14 +142,6 @@ Using Helm to install Jenkins from the Charts repository.
 1. From the “Kind” dropdown, select “Google Service Account from metadata”
 1. Click “OK”
 
-### Add service account credentials
-
-1. In the Jenkins UI, Click “Credentials” on the left
-1. Click either of the “(global)” links (they both route to the same URL)
-1. Click “Add Credentials” on the left
-1. From the “Kind” dropdown, select “Google Service Account from metadata”
-1. Click “OK”
-
 ## Deploying MySQL database
 
 Deployment of mysql db is done outside pipeline using below commands
